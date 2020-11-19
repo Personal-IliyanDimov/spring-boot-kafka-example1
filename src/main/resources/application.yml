@@ -1,0 +1,13 @@
+spring:
+  cloud:
+    stream:
+
+      bindings:
+        auctionSupplier-out-0:
+          destination: "auction-topic"
+
+        auctionBidSupplier-out-0:
+          destination: "auction-bid-topic"
+
+
+
