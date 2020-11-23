@@ -1,12 +1,16 @@
 spring:
   cloud:
     stream:
+      function:
+        bindings:
+          auctionSupplier-out-0: auction-supplier
+          auctionBidSupplier-out-0: auction-bid-supplier
 
       bindings:
-        auctionSupplier-out-0:
+        auction-supplier:
           destination: "auction-topic"
 
-        auctionBidSupplier-out-0:
+        auction-bid-supplier:
           destination: "auction-bid-topic"
 
 

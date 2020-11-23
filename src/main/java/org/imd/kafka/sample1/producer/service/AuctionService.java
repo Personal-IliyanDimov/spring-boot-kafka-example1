@@ -28,7 +28,7 @@ public class AuctionService {
     @Async
     public void sendAuctionBidEvent(AuctionBidEvent auctionBidEvent) throws IOException {
         final String data = objectMapper.writeValueAsString(auctionBidEvent);
-        streamBridge.send("auction-bid-supplier","");
+        streamBridge.send("auction-bid-supplier", data);
     }
 
     @PostConstruct
