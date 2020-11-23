@@ -4,19 +4,34 @@ import org.imd.kafka.sample1.producer.model.event.AuctionBidEvent;
 import org.imd.kafka.sample1.producer.model.event.AuctionEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import reactor.core.publisher.EmitterProcessor;
+import reactor.core.publisher.Flux;
 
 import java.util.function.Supplier;
 
 @Configuration
 public class CloudStreamConfig {
 
-    @Bean
-    public Supplier<AuctionEvent> auctionSupplier() {
-        return () -> null;
+    private EmitterProcessor<AuctionEvent> auctionProcessor = EmitterProcessor.create();
+    private EmitterProcessor<AuctionBidEvent> auctionBidProcessor = EmitterProcessor.create();
+
+    @Bean("auctionProcessor")
+    public EmitterProcessor<AuctionEvent> getAuctionProcessor() {
+        return auctionProcessor;
+    }
+
+    @Bean("auctionBidProcessor")
+    public EmitterProcessor<AuctionBidEvent> getAuctionBidProcessor() {
+        return auctionBidProcessor;
     }
 
     @Bean
-    public Supplier<AuctionBidEvent> auctionBidSupplier() {
-        return () -> null;
+    public Supplier<Flux<AuctionEvent>> auctionSupplier() {
+        return () -> this.auctionProcessor;
+    }
+
+    @Bean
+    public Supplier<Flux<AuctionBidEvent>> auctionBidSupplier() {
+        return () -> this.auctionBidProcessor;
     }
 }

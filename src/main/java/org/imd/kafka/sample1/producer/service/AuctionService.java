@@ -1,38 +1,31 @@
 package org.imd.kafka.sample1.producer.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import org.imd.kafka.sample1.producer.model.event.AuctionBidEvent;
 import org.imd.kafka.sample1.producer.model.event.AuctionEvent;
-import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.EmitterProcessor;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 
 @Service
-@RequiredArgsConstructor
 public class AuctionService {
 
-    private final StreamBridge streamBridge;
+    @Qualifier("auctionProcessor")
+    @Autowired
+    private EmitterProcessor<AuctionEvent> auctionEventEmitterProcessor;
 
-    private ObjectMapper objectMapper;
+    @Qualifier("auctionBidProcessor")
+    @Autowired
+    private EmitterProcessor<AuctionBidEvent> auctionBidEventEmitterProcessor;
 
-    @Async
+
     public void sendAuctionEvent(AuctionEvent auctionEvent) throws IOException {
-        final String data = objectMapper.writeValueAsString(auctionEvent);
-        streamBridge.send("auction-supplier", data);
+        auctionEventEmitterProcessor.onNext(auctionEvent);
     }
 
-    @Async
     public void sendAuctionBidEvent(AuctionBidEvent auctionBidEvent) throws IOException {
-        final String data = objectMapper.writeValueAsString(auctionBidEvent);
-        streamBridge.send("auction-bid-supplier", data);
-    }
-
-    @PostConstruct
-    public void afterProperties() {
-        objectMapper = new ObjectMapper();
+        auctionBidEventEmitterProcessor.onNext(auctionBidEvent);
     }
 }
