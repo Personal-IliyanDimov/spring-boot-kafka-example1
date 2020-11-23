@@ -9,9 +9,15 @@ spring:
       bindings:
         auction-supplier:
           destination: "auction-topic"
+          producer:
+            partitionKeyExtractorName: payload.auctionId
+            partitionCount: 3
+
 
         auction-bid-supplier:
           destination: "auction-bid-topic"
-
+          producer:
+            partitionKeyExtractorName: payload.auctionId
+            partitionCount: 3
 
 
