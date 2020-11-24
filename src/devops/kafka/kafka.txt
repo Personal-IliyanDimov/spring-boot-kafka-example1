@@ -1,0 +1,3 @@
+Kafdrop is used as kafka client
+
+
