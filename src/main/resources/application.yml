@@ -12,12 +12,21 @@ spring:
           producer:
             partitionKeyExtractorName: payload.auctionId
             partitionCount: 3
-
+          binder: kafka
 
         auction-bid-supplier:
           destination: "auction-bid-topic"
           producer:
             partitionKeyExtractorName: payload.auctionId
             partitionCount: 3
+          binder: kafka
+
+      kafka:
+        binder:
+          brokers:
+            - localhost:9092
+            - localhost:9093
+            - localhost:9094
+          auto-create-topics: false
 
 
