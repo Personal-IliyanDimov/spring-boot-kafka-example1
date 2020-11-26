@@ -2,6 +2,7 @@ spring:
   cloud:
     stream:
       function:
+        definition: auctionSupplier;auctionBidSupplier;
         bindings:
           auctionSupplier-out-0: auction-supplier
           auctionBidSupplier-out-0: auction-bid-supplier
@@ -10,14 +11,14 @@ spring:
         auction-supplier:
           destination: "auction-topic"
           producer:
-            partitionKeyExtractorName: payload.auctionId
+            partitionKeyExpression: payload.auctionId
             partitionCount: 3
           binder: kafka
 
         auction-bid-supplier:
           destination: "auction-bid-topic"
           producer:
-            partitionKeyExtractorName: payload.auctionId
+            partitionKeyExpression: payload.auctionId
             partitionCount: 3
           binder: kafka
 
@@ -28,5 +29,11 @@ spring:
             - localhost:9093
             - localhost:9094
           auto-create-topics: false
+          configuration:
+            security.protocol: "PLAINTEXT"
+
+
+
+
 
 

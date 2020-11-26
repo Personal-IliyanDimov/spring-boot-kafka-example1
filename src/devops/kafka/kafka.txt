@@ -1,3 +1,7 @@
 Kafdrop is used as kafka client
 
+Useful links:
+https://github.com/bitnami/bitnami-docker-kafka
+https://hub.docker.com/r/bitnami/kafka/
+
 
