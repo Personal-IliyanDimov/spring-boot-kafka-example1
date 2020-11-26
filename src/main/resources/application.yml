@@ -4,8 +4,8 @@ spring:
       function:
         definition: auctionSupplier;auctionBidSupplier;
         bindings:
-          auctionSupplier-in-0: auction-supplier
-          auctionBidSupplier-in-0: auction-bid-supplier
+          auctionSupplier-out-0: auction-supplier
+          auctionBidSupplier-out-0: auction-bid-supplier
 
       bindings:
         auction-supplier:
