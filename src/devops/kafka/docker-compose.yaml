@@ -62,7 +62,7 @@ services:
     ports:
       - "9000:9000"
     environment:
-      KAFKA_BROKERCONNECT: "PLAINTEXT://kafka-server1:9092,PLAINTEXT://kafka-server2:9093,PLAINTEXT://kafka-server3:9094"
+      KAFKA_BROKERCONNECT: "PLAINTEXT://kafka-server1:9092,PLAINTEXT://kafka-server2:9092,PLAINTEXT://kafka-server3:9092"
       JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
     depends_on:
       - "kafka-server1"
