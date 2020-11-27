@@ -2,6 +2,7 @@ package org.imd.kafka.sample1.producer.service;
 
 import org.imd.kafka.sample1.producer.model.event.AuctionBidEvent;
 import org.imd.kafka.sample1.producer.model.event.AuctionEvent;
+import org.imd.kafka.sample1.producer.model.event.AuctionFlushEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,10 @@ public class AuctionService {
     @Autowired
     private EmitterProcessor<AuctionBidEvent> auctionBidEventEmitterProcessor;
 
+    @Qualifier("auctionFlushProcessor")
+    @Autowired
+    private EmitterProcessor<AuctionFlushEvent> auctionFlushEventEmitterProcessor;
+
 
     public void sendAuctionEvent(AuctionEvent auctionEvent) throws IOException {
         auctionEventEmitterProcessor.onNext(auctionEvent);
@@ -27,5 +32,9 @@ public class AuctionService {
 
     public void sendAuctionBidEvent(AuctionBidEvent auctionBidEvent) throws IOException {
         auctionBidEventEmitterProcessor.onNext(auctionBidEvent);
+    }
+
+    public void sendAuctionFlushEvent(AuctionFlushEvent auctionFlushEvent) {
+        auctionFlushEventEmitterProcessor.onNext(auctionFlushEvent);
     }
 }

@@ -5,6 +5,7 @@ import org.imd.kafka.sample1.producer.model.dto.AuctionBidDto;
 import org.imd.kafka.sample1.producer.model.dto.AuctionDto;
 import org.imd.kafka.sample1.producer.model.event.AuctionBidEvent;
 import org.imd.kafka.sample1.producer.model.event.AuctionEvent;
+import org.imd.kafka.sample1.producer.model.event.AuctionFlushEvent;
 import org.imd.kafka.sample1.producer.service.AuctionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -51,5 +52,14 @@ public class AuctionController {
         auctionBidEvent.setBidPrice(bidDto.getBidPrice());
 
         auctionService.sendAuctionBidEvent(auctionBidEvent);
+    }
+
+    @PostMapping(value = {"/{aid}/flush"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    void bid(@PathVariable(name = "aid") @NotNull Long aid) throws IOException {
+        final AuctionFlushEvent auctionFlushEvent = new AuctionFlushEvent();
+        auctionFlushEvent.setAuctionId(aid);
+
+        auctionService.sendAuctionFlushEvent(auctionFlushEvent);
     }
 }

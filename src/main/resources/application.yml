@@ -2,10 +2,11 @@ spring:
   cloud:
     stream:
       function:
-        definition: auctionSupplier;auctionBidSupplier;
+        definition: auctionSupplier;auctionBidSupplier;auctionFlushSupplier;
         bindings:
           auctionSupplier-out-0: auction-supplier
           auctionBidSupplier-out-0: auction-bid-supplier
+          auctionFlushSupplier-out-0: auction-flush-supplier
 
       bindings:
         auction-supplier:
@@ -17,6 +18,13 @@ spring:
 
         auction-bid-supplier:
           destination: "auction-bid-topic"
+          producer:
+            partitionKeyExpression: payload.auctionId
+            partitionCount: 3
+          binder: kafka
+
+        auction-flush-supplier:
+          destination: "auction-flush-topic"
           producer:
             partitionKeyExpression: payload.auctionId
             partitionCount: 3
