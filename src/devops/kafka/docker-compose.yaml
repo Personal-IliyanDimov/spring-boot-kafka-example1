@@ -57,7 +57,7 @@ services:
       - "zookeeper"
 
   kafdrop:
-    image: obsidiandynamics/kafdrop
+    image: 'obsidiandynamics/kafdrop:3.27.0'
     restart: "no"
     ports:
       - "9000:9000"
@@ -68,3 +68,27 @@ services:
       - "kafka-server1"
       - "kafka-server2"
       - "kafka-server3"
+
+  cluster-kafka-exporter:
+    # build: 'cluster-kafka-exporter'
+    image: 'docker.io/bitnami/kafka-exporter:1.2.0-debian-10-r294'
+    ports:
+      - 9308:9308
+    command: --kafka.server=kafka-server1:9092 --kafka.server=kafka-server2:9092 --kafka.server=kafka-server3:9092
+    depends_on:
+      - "kafka-server1"
+      - "kafka-server2"
+      - "kafka-server3"
+
+  prometheus:
+    image: 'prom/prometheus:v2.23.0'
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: 'grafana/grafana:7.3.4-ubuntu'
+    ports:
+      - "3000:3000"
+

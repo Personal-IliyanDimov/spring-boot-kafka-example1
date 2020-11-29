@@ -4,4 +4,21 @@ Useful links:
 https://github.com/bitnami/bitnami-docker-kafka
 https://hub.docker.com/r/bitnami/kafka/
 
+Kafka Exporter Links:
+>> https://hub.docker.com/r/bitnami/kafka-exporter/
+
+Using kafdrop add the following topics:
+<topic-name>:<partitions>:<replications>
+>> auction-bid-topic:3:3
+>> auction-flush-topic:3:3
+>> auction-topic:3:3
+
+Grafana:
+>> default user admin/admin
+>> Add the following as data source: http://prometheus:9090
+>> Import the following board: 7589
+
+
+
+
 
