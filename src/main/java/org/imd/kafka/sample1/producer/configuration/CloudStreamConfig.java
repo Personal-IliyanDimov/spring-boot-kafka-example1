@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.EmitterProcessor;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.FluxSink;
 
 import java.util.function.Supplier;
 
@@ -17,34 +18,33 @@ public class CloudStreamConfig {
     private EmitterProcessor<AuctionBidEvent> auctionBidProcessor = EmitterProcessor.create();
     private EmitterProcessor<AuctionFlushEvent> auctionFlushProcessor = EmitterProcessor.create();
 
-    @Bean("auctionProcessor")
-    public EmitterProcessor<AuctionEvent> getAuctionProcessor() {
-        return auctionProcessor;
+    @Bean("auctionSink")
+    public FluxSink<AuctionEvent> getAuctionSink() {
+        return auctionProcessor.sink(FluxSink.OverflowStrategy.BUFFER);
     }
 
-    @Bean("auctionBidProcessor")
-    public EmitterProcessor<AuctionBidEvent> getAuctionBidProcessor() {
-        return auctionBidProcessor;
+    @Bean("auctionBidSink")
+    public FluxSink<AuctionBidEvent> getAuctionBidSink() {
+        return auctionBidProcessor.sink(FluxSink.OverflowStrategy.BUFFER);
     }
 
-    @Bean("auctionFlushProcessor")
-    public EmitterProcessor<AuctionFlushEvent> getAuctionFlushProcessor() {
-        return auctionFlushProcessor;
+    @Bean("auctionFlushSink")
+    public FluxSink<AuctionFlushEvent> getAuctionFlushSink() {
+        return auctionFlushProcessor.sink(FluxSink.OverflowStrategy.BUFFER);
     }
-
 
     @Bean
     public Supplier<Flux<AuctionEvent>> auctionSupplier() {
-        return () -> this.auctionProcessor;
+        return () -> Flux.from(this.auctionProcessor);
     }
 
     @Bean
     public Supplier<Flux<AuctionBidEvent>> auctionBidSupplier() {
-        return () -> this.auctionBidProcessor;
+        return () -> Flux.from(this.auctionBidProcessor);
     }
 
     @Bean
     public Supplier<Flux<AuctionFlushEvent>> auctionFlushSupplier() {
-        return () -> this.auctionFlushProcessor;
+        return () -> Flux.from(this.auctionFlushProcessor);
     }
 }

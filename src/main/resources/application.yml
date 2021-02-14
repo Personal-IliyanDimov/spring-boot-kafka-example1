@@ -40,8 +40,10 @@ spring:
           configuration:
             security.protocol: "PLAINTEXT"
 
-
-
-
+logging:
+  level:
+    root: INFO
+    org.apache.kafka: DEBUG
+    org.springframework.cloud: DEBUG
 
 

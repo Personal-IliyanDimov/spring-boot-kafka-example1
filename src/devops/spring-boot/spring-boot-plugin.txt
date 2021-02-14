@@ -1,0 +1,6 @@
+Plugin official documentation:
+>> https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/htmlsingle/#introduction
+
+>> Search for release train to get correct matching between cloud and spring boot
+https://spring.io/projects/spring-cloud
+

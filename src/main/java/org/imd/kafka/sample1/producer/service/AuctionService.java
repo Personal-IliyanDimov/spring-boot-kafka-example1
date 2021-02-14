@@ -6,35 +6,35 @@ import org.imd.kafka.sample1.producer.model.event.AuctionFlushEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.EmitterProcessor;
+import reactor.core.publisher.FluxSink;
 
 import java.io.IOException;
 
 @Service
 public class AuctionService {
 
-    @Qualifier("auctionProcessor")
+    @Qualifier("auctionSink")
     @Autowired
-    private EmitterProcessor<AuctionEvent> auctionEventEmitterProcessor;
+    private FluxSink<AuctionEvent> auctionEventSink;
 
-    @Qualifier("auctionBidProcessor")
+    @Qualifier("auctionBidSink")
     @Autowired
-    private EmitterProcessor<AuctionBidEvent> auctionBidEventEmitterProcessor;
+    private FluxSink<AuctionBidEvent> auctionBidEventSink;
 
-    @Qualifier("auctionFlushProcessor")
+    @Qualifier("auctionFlushSink")
     @Autowired
-    private EmitterProcessor<AuctionFlushEvent> auctionFlushEventEmitterProcessor;
+    private FluxSink<AuctionFlushEvent> auctionFlushEventSink;
 
 
     public void sendAuctionEvent(AuctionEvent auctionEvent) throws IOException {
-        auctionEventEmitterProcessor.onNext(auctionEvent);
+        auctionEventSink.next(auctionEvent);
     }
 
     public void sendAuctionBidEvent(AuctionBidEvent auctionBidEvent) throws IOException {
-        auctionBidEventEmitterProcessor.onNext(auctionBidEvent);
+        auctionBidEventSink.next(auctionBidEvent);
     }
 
     public void sendAuctionFlushEvent(AuctionFlushEvent auctionFlushEvent) {
-        auctionFlushEventEmitterProcessor.onNext(auctionFlushEvent);
+        auctionFlushEventSink.next(auctionFlushEvent);
     }
 }
