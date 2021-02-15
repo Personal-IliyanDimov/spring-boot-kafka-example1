@@ -18,6 +18,11 @@ Grafana:
 >> Add the following as data source: http://prometheus:9090
 >> Import the following board: 7589
 
+Documentation:
+>> https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#spring-cloud-stream-overview-error-handling
+>> https://projectreactor.io/docs/core/3.3.11.RELEASE/reference/index.html#processors
+>> https://cloud.spring.io/spring-cloud-stream-binder-kafka/spring-cloud-stream-binder-kafka.html
+
 
 
 

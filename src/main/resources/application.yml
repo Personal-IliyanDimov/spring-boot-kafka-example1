@@ -31,6 +31,23 @@ spring:
           binder: kafka
 
       kafka:
+        bindings:
+          auction-supplier:
+            producer:
+              batchTimeout: 10
+              bufferSize: 65536
+              compression: gzip
+          auction-bid-supplier:
+            producer:
+              batchTimeout: 10
+              bufferSize: 65536
+              compression: gzip
+          auction-flush-supplier:
+            producer:
+              batchTimeout: 10
+              bufferSize: 65536
+              compression: gzip
+
         binder:
           brokers:
             - localhost:9094
