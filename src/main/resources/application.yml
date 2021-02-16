@@ -35,17 +35,17 @@ spring:
           auction-supplier:
             producer:
               batchTimeout: 10
-              bufferSize: 65536
+              bufferSize: 1048576
               compression: gzip
           auction-bid-supplier:
             producer:
               batchTimeout: 10
-              bufferSize: 65536
+              bufferSize: 1048576
               compression: gzip
           auction-flush-supplier:
             producer:
               batchTimeout: 10
-              bufferSize: 65536
+              bufferSize: 1048576
               compression: gzip
 
         binder:
