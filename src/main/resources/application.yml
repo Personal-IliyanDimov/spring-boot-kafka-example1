@@ -34,19 +34,19 @@ spring:
         bindings:
           auction-supplier:
             producer:
-              batchTimeout: 10
-              bufferSize: 1048576
-              compression: gzip
+              batchTimeout: 50
+              bufferSize: 10485760
+              compression: zstd
           auction-bid-supplier:
             producer:
-              batchTimeout: 10
-              bufferSize: 1048576
-              compression: gzip
+              batchTimeout: 50
+              bufferSize: 10485760
+              compression: zstd
           auction-flush-supplier:
             producer:
-              batchTimeout: 10
-              bufferSize: 1048576
-              compression: gzip
+              batchTimeout: 50
+              bufferSize: 10485760
+              compression: zstd
 
         binder:
           brokers:
@@ -60,7 +60,8 @@ spring:
 logging:
   level:
     root: INFO
-    org.apache.kafka: DEBUG
-    org.springframework.cloud: DEBUG
+    # too much logging kills performance
+    # org.apache.kafka: DEBUG
+    # org.springframework.cloud: DEBUG
 
 

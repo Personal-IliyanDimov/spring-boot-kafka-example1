@@ -1,0 +1,25 @@
+How to write queries:
+>> https://prometheus.io/docs/prometheus/latest/querying/basics/
+
+Examples:
+All topics, all partitions, all offsets
+>> kafka_topic_partition_current_offset
+
+Same as the one above but for specific topic
+>> kafka_topic_partition_current_offset{topic="auction-bid-topic"}
+
+How the offset changed the last minute (each 5s probe due to such configuration)
+>> kafka_topic_partition_current_offset{topic="auction-bid-topic"}[1m]
+
+How many items we have in all partitions for the selected topic
+>> sum(kafka_topic_partition_current_offset{topic="auction-bid-topic"} )
+
+performance/throughput of each partition of the cluster for 1m for specific topic
+>> rate(kafka_topic_partition_current_offset{topic="auction-bid-topic"} [1m])
+
+performance/throughput of each partition of the cluster for 1m for specific topic, but 10m ago
+>> rate(kafka_topic_partition_current_offset{topic="auction-bid-topic"} [1m] offset 10m)
+
+>> performance/throughput of the cluster for 1m for specific topic (sum of individual partitions)
+sum(rate(kafka_topic_partition_current_offset{topic="auction-bid-topic"} [1m]))
+
