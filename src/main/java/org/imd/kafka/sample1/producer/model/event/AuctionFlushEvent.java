@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class AuctionFlushEvent {
     private Long auctionId;
+    private Boolean remove;
 }

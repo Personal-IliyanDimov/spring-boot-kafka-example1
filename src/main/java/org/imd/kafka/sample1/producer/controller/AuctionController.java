@@ -3,6 +3,7 @@ package org.imd.kafka.sample1.producer.controller;
 import lombok.RequiredArgsConstructor;
 import org.imd.kafka.sample1.producer.model.dto.AuctionBidDto;
 import org.imd.kafka.sample1.producer.model.dto.AuctionDto;
+import org.imd.kafka.sample1.producer.model.dto.AuctionFlushDto;
 import org.imd.kafka.sample1.producer.model.event.AuctionBidEvent;
 import org.imd.kafka.sample1.producer.model.event.AuctionEvent;
 import org.imd.kafka.sample1.producer.model.event.AuctionFlushEvent;
@@ -57,9 +58,10 @@ public class AuctionController {
 
     @PostMapping(value = {"/{aid}/flush"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    void flushAuction(@PathVariable(name = "aid") @NotNull Long aid) throws IOException {
+    void flushAuction(@PathVariable(name = "aid") @NotNull Long aid, @RequestBody AuctionFlushDto flushDto) throws IOException {
         final AuctionFlushEvent auctionFlushEvent = new AuctionFlushEvent();
         auctionFlushEvent.setAuctionId(aid);
+        auctionFlushEvent.setRemove(flushDto.getRemove());
 
         auctionService.sendAuctionFlushEvent(auctionFlushEvent);
     }
