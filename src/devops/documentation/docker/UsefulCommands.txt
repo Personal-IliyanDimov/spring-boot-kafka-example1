@@ -1,5 +1,5 @@
 Start infrastructure:
 >> spring-boot-kafka-sample1-producer/src/devops$ sudo docker-compose -f docker-compose.yml start
 
-Check it is working
+Check it is working:
 >> spring-boot-kafka-sample1-producer/src/devops$ sudo docker ps

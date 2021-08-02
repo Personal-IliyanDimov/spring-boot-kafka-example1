@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.3">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.4.1">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Kafka Sample1" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -43,7 +43,7 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">100</stringProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <stringProp name="ThreadGroup.ramp_time">0</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
@@ -79,7 +79,7 @@
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
                   <stringProp name="Argument.value">{&#xd;
     &quot;auctionId&quot;: ${auctionId},&#xd;
-    &quot;auctionType&quot;: &quot;HIT_THE_TARGET&quot;,&#xd;
+    &quot;auctionType&quot;: &quot;HIT_FIRST_THE_TARGET&quot;,&#xd;
     &quot;itemId&quot;: ${auctionId}, &#xd;
     &quot;targetPrice&quot;: &quot;1000.00&quot;,&#xd;
     &quot;startDate&quot;: &quot;2021-02-16T10:00:00&quot;&#xd;
