@@ -45,7 +45,7 @@ public class AuctionController {
 
     @PostMapping(value = {"/{aid}/bids"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    void createBid(@PathVariable(name = "aid") @NotNull Long aid,  @RequestBody AuctionBidDto bidDto) throws IOException {
+    void createBid(@PathVariable(name = "aid") @NotNull String aid,  @RequestBody AuctionBidDto bidDto) throws IOException {
         final AuctionBidEvent auctionBidEvent = new AuctionBidEvent();
         auctionBidEvent.setAuctionBidId(bidDto.getAuctionBidId());
         auctionBidEvent.setAuctionId(aid);
@@ -58,7 +58,7 @@ public class AuctionController {
 
     @PostMapping(value = {"/{aid}/flush"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    void flushAuction(@PathVariable(name = "aid") @NotNull Long aid, @RequestBody AuctionFlushDto flushDto) throws IOException {
+    void flushAuction(@PathVariable(name = "aid") @NotNull String aid, @RequestBody AuctionFlushDto flushDto) throws IOException {
         final AuctionFlushEvent auctionFlushEvent = new AuctionFlushEvent();
         auctionFlushEvent.setAuctionId(aid);
         auctionFlushEvent.setRemove(flushDto.getRemove());

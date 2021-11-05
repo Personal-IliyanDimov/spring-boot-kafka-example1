@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AuctionFlushEvent {
-    private Long auctionId;
+    private String auctionId;
     private Boolean remove;
 }

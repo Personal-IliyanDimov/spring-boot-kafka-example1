@@ -3,3 +3,4 @@ Start infrastructure:
 
 Check it is working:
 >> spring-boot-kafka-sample1-producer/src/devops$ sudo docker ps
+

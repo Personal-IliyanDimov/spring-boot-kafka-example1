@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class AuctionEvent {
-    private Long auctionId;
+    private String auctionId;
     private AuctionType auctionType;
     private Long itemId;
     private BigDecimal targetPrice;

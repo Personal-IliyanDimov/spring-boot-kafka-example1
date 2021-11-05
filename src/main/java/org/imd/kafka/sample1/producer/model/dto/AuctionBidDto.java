@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Setter
 @ToString
 public class AuctionBidDto {
-    private Long auctionBidId;
-    private Long userId;
+    private String auctionBidId;
+    private String userId;
     private BigDecimal bidPrice;
 }
