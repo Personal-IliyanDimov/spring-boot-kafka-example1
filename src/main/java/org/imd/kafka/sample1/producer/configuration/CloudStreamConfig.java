@@ -35,16 +35,16 @@ public class CloudStreamConfig {
 
     @Bean
     public Supplier<Flux<AuctionEvent>> auctionSupplier() {
-        return () -> Flux.from(this.auctionProcessor);
+        return () -> Flux.from(this.auctionProcessor).name("producer-metrics-auction").metrics();
     }
 
     @Bean
     public Supplier<Flux<AuctionBidEvent>> auctionBidSupplier() {
-        return () -> Flux.from(this.auctionBidProcessor);
+        return () -> Flux.from(this.auctionBidProcessor).name("producer-metrics-auction-bid").metrics();
     }
 
     @Bean
     public Supplier<Flux<AuctionFlushEvent>> auctionFlushSupplier() {
-        return () -> Flux.from(this.auctionFlushProcessor);
+        return () -> Flux.from(this.auctionFlushProcessor).name("producer-metrics-auction-flush").metrics();
     }
 }
