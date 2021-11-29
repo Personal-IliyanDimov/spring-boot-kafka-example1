@@ -26,11 +26,11 @@ public class AuctionService {
     private FluxSink<AuctionFlushEvent> auctionFlushEventSink;
 
 
-    public void sendAuctionEvent(AuctionEvent auctionEvent) throws IOException {
+    public void sendAuctionEvent(AuctionEvent auctionEvent) {
         auctionEventSink.next(auctionEvent);
     }
 
-    public void sendAuctionBidEvent(AuctionBidEvent auctionBidEvent) throws IOException {
+    public void sendAuctionBidEvent(AuctionBidEvent auctionBidEvent) {
         auctionBidEventSink.next(auctionBidEvent);
     }
 

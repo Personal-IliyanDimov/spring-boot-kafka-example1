@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
@@ -32,37 +33,49 @@ public class AuctionController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    void createAuction(@RequestBody AuctionDto auctionDto) throws IOException {
-        final AuctionEvent auctionEvent = new AuctionEvent();
-        auctionEvent.setAuctionId(auctionDto.getAuctionId());
-        auctionEvent.setAuctionType(auctionDto.getAuctionType());
-        auctionEvent.setItemId(auctionDto.getItemId());
-        auctionEvent.setTargetPrice(auctionDto.getTargetPrice());
-        auctionEvent.setStartDate(auctionDto.getStartDate());
+    Mono<?> createAuction(@RequestBody AuctionDto auctionDto) throws IOException {
+        return Mono.fromSupplier(() -> {
+            final AuctionEvent auctionEvent = new AuctionEvent();
+            auctionEvent.setAuctionId(auctionDto.getAuctionId());
+            auctionEvent.setAuctionType(auctionDto.getAuctionType());
+            auctionEvent.setItemId(auctionDto.getItemId());
+            auctionEvent.setTargetPrice(auctionDto.getTargetPrice());
+            auctionEvent.setStartDate(auctionDto.getStartDate());
 
-        auctionService.sendAuctionEvent(auctionEvent);
+            auctionService.sendAuctionEvent(auctionEvent);
+            return auctionDto;
+        })
+        .then();
     }
 
     @PostMapping(value = {"/{aid}/bids"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    void createBid(@PathVariable(name = "aid") @NotNull String aid,  @RequestBody AuctionBidDto bidDto) throws IOException {
-        final AuctionBidEvent auctionBidEvent = new AuctionBidEvent();
-        auctionBidEvent.setAuctionBidId(bidDto.getAuctionBidId());
-        auctionBidEvent.setAuctionId(aid);
-        auctionBidEvent.setBidDateTime(LocalDateTime.now());
-        auctionBidEvent.setUserId(bidDto.getUserId());
-        auctionBidEvent.setBidPrice(bidDto.getBidPrice());
+    Mono<Void> createBid(@PathVariable(name = "aid") @NotNull String aid, @RequestBody AuctionBidDto bidDto) throws IOException {
+        return Mono.fromSupplier(() -> {
+            final AuctionBidEvent auctionBidEvent = new AuctionBidEvent();
+            auctionBidEvent.setAuctionBidId(bidDto.getAuctionBidId());
+            auctionBidEvent.setAuctionId(aid);
+            auctionBidEvent.setBidDateTime(LocalDateTime.now());
+            auctionBidEvent.setUserId(bidDto.getUserId());
+            auctionBidEvent.setBidPrice(bidDto.getBidPrice());
 
-        auctionService.sendAuctionBidEvent(auctionBidEvent);
+            auctionService.sendAuctionBidEvent(auctionBidEvent);
+            return auctionBidEvent;
+        })
+        .then();
     }
 
     @PostMapping(value = {"/{aid}/flush"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    void flushAuction(@PathVariable(name = "aid") @NotNull String aid, @RequestBody AuctionFlushDto flushDto) throws IOException {
-        final AuctionFlushEvent auctionFlushEvent = new AuctionFlushEvent();
-        auctionFlushEvent.setAuctionId(aid);
-        auctionFlushEvent.setRemove(flushDto.getRemove());
+    Mono<Void> flushAuction(@PathVariable(name = "aid") @NotNull String aid, @RequestBody AuctionFlushDto flushDto) throws IOException {
+        return Mono.fromSupplier(() -> {
+            final AuctionFlushEvent auctionFlushEvent = new AuctionFlushEvent();
+            auctionFlushEvent.setAuctionId(aid);
+            auctionFlushEvent.setRemove(flushDto.getRemove());
 
-        auctionService.sendAuctionFlushEvent(auctionFlushEvent);
+            auctionService.sendAuctionFlushEvent(auctionFlushEvent);
+            return auctionFlushEvent;
+        })
+        .then();
     }
 }
