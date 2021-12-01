@@ -1,0 +1,69 @@
+### HTTP2 Certificate
+
+* [create certificate] (https://byte27.com/2020/02/03/using-http-2-in-your-spring-boot-application/)
+===
+openssl req -x509 -out localhost.crt -keyout localhost.key \
+-newkey rsa:2048 -nodes -sha256 \
+-subj '/CN=localhost' -extensions EXT -config <( \
+printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
+===
+===
+openssl pkcs12 -export -in localhost.crt -inkey localhost.key -name localhost -out localhost.p12
+
+Enter password: password
+===
+===
+openssl pkcs12 -in localhost.p12 -out localhost.pem -clcerts
+
+Keep the same password everywhere
+===
+
+###
+Test http2 without verifying the certificate
+(just check whether http2 works without testing the security)
+===
+curl -k --http2 --location --request POST 'https://localhost:11110/auctions' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "auctionId": "1",
+    "auctionType": "HIT_FIRST_THE_TARGET",
+    "itemId": 1,
+    "targetPrice": "1000.00",
+    "startDate": "2020-11-23T17:00:00"
+}'
+
+===
+
+###
+Test http2 with verifying the certificate
+
+Go to /resources/http2 folder and execute (any curl)
+Download PEM files in advance from application url via browser (or used the (p12 -> pem conversion) result file).
+Verified that all works with cUrl
+===
+curl --cacert localhost.pem --http2 --location --request POST 'https://localhost:11110/auctions' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "auctionId": "1",
+    "auctionType": "HIT_FIRST_THE_TARGET",
+    "itemId": 1,
+    "targetPrice": "1000.00",
+    "startDate": "2020-11-23T17:00:00"
+}'
+
+===
+
+Go to /resources/http2 folder and execute (requires latest curl)
+===
+curl --cert-type P12 --cert localhost.p12:password --http2 --location --request POST 'https://localhost:11110/auctions' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "auctionId": "1",
+    "auctionType": "HIT_FIRST_THE_TARGET",
+    "itemId": 1,
+    "targetPrice": "1000.00",
+    "startDate": "2020-11-23T17:00:00"
+}'
+
+===
+

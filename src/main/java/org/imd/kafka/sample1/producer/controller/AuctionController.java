@@ -10,6 +10,7 @@ import org.imd.kafka.sample1.producer.model.event.AuctionFlushEvent;
 import org.imd.kafka.sample1.producer.service.AuctionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,7 +34,7 @@ public class AuctionController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    Mono<?> createAuction(@RequestBody AuctionDto auctionDto) throws IOException {
+    Mono<ResponseEntity<Void>> createAuction(@RequestBody AuctionDto auctionDto) throws IOException {
         return Mono.fromSupplier(() -> {
             final AuctionEvent auctionEvent = new AuctionEvent();
             auctionEvent.setAuctionId(auctionDto.getAuctionId());
@@ -45,12 +46,12 @@ public class AuctionController {
             auctionService.sendAuctionEvent(auctionEvent);
             return auctionDto;
         })
-        .then();
+        .then(Mono.just(ResponseEntity.ok().<Void>build()));
     }
 
     @PostMapping(value = {"/{aid}/bids"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    Mono<Void> createBid(@PathVariable(name = "aid") @NotNull String aid, @RequestBody AuctionBidDto bidDto) throws IOException {
+    Mono<ResponseEntity<Void>> createBid(@PathVariable(name = "aid") @NotNull String aid, @RequestBody AuctionBidDto bidDto) throws IOException {
         return Mono.fromSupplier(() -> {
             final AuctionBidEvent auctionBidEvent = new AuctionBidEvent();
             auctionBidEvent.setAuctionBidId(bidDto.getAuctionBidId());
@@ -62,12 +63,12 @@ public class AuctionController {
             auctionService.sendAuctionBidEvent(auctionBidEvent);
             return auctionBidEvent;
         })
-        .then();
+        .then(Mono.just(ResponseEntity.ok().<Void>build()));
     }
 
     @PostMapping(value = {"/{aid}/flush"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    Mono<Void> flushAuction(@PathVariable(name = "aid") @NotNull String aid, @RequestBody AuctionFlushDto flushDto) throws IOException {
+    Mono<ResponseEntity<Void>> flushAuction(@PathVariable(name = "aid") @NotNull String aid, @RequestBody AuctionFlushDto flushDto) throws IOException {
         return Mono.fromSupplier(() -> {
             final AuctionFlushEvent auctionFlushEvent = new AuctionFlushEvent();
             auctionFlushEvent.setAuctionId(aid);
@@ -76,6 +77,6 @@ public class AuctionController {
             auctionService.sendAuctionFlushEvent(auctionFlushEvent);
             return auctionFlushEvent;
         })
-        .then();
+        .then(Mono.just(ResponseEntity.ok().<Void>build()));
     }
 }

@@ -1,7 +1,15 @@
 server:
-  tomcat:
-    threads:
-      max: 400
+  http2:
+    enabled: true
+
+  #  http2 requires definitely security
+  #  so ssl section is for that (valid until Nov 2022)
+
+  ssl:
+    key-store-type: PKCS12
+    key-store: classpath:http2/localhost.p12
+    key-store-password: password
+    key-alias: localhost
 
 spring:
   cloud:
