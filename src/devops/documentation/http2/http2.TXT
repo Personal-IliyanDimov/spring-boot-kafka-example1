@@ -67,3 +67,17 @@ curl --cert-type P12 --cert localhost.p12:password --http2 --location --request 
 
 ===
 
+Others:
+
+You can run the following command to list the content of your keystore file (and alias name):
+keytool -v -list -keystore localhost.p12
+
+
+
+### Wireshark
+Interface: Loopback Lo or others if you need it
+Filters:
+ip.dst == 127.0.0.1 && tcp.port == 11110
+
+
+

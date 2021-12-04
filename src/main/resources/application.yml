@@ -6,6 +6,7 @@ server:
   #  so ssl section is for that (valid until Nov 2022)
 
   ssl:
+    enabled: true
     key-store-type: PKCS12
     key-store: classpath:http2/localhost.p12
     key-store-password: password
