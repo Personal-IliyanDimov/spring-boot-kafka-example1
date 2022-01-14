@@ -1,0 +1,328 @@
+Testing Producer: Commands: {
+    Useful Links:
+    https://blog.fireheart.in/a?ID=01800-cdf8efa1-1f8b-4835-8aa1-bd4a89f66f81
+    https://medium.com/metrosystemsro/apache-kafka-how-to-test-performance-for-clients-configured-with-ssl-encryption-3356d3a0d52b
+
+
+
+    Login docker:
+    sudo docker exec -it <container-id>>  /bin/bash
+
+    Check bootstrap-server:
+    cat config/server.properties
+
+    List topics:
+    /opt/bitnami/kafka$ kafka-topics.sh --bootstrap-server=kafka-server1:9092 --list
+
+    Perf Test Commands Help:
+    $ bin/kafka-producer-perf-test.sh --help
+    $ bin/kafka-consumer-perf-test.sh --help
+
+    Create Topic:
+    $ bin/kafka-topics.sh \
+    --create \
+    --topic <topic-name> \
+    --partitions 3 \
+    --replication-factor 2 \
+    --config retention.ms=86400000 \
+    --config min.insync.replicas=2 \
+    --bootstrap-server kafka-server1:9092,kafka-server2:9092,kafka-server3:9092
+
+     Producer Test:
+     $ bin/kafka-producer-perf-test.sh \
+     --topic <topic-name> \
+     --throughput -1 \
+     --num-records 10000000 \
+     --record-size 256 \
+     --producer-props acks=all bootstrap.servers=kafka-server1:9092,kafka-server2:9092,kafka-server3:9092 \
+     --print-metrics
+
+     Consumer Test:
+
+
+
+    Test1: Producer test on topic producer-p3-rf2-smallmsgs-test with 3 partitions and 2 as replication factor
+           and small size message  (256 bytes or 0.25K)
+
+      1625549 records sent, 325109.8 records/sec (79.37 MB/sec), 321.4 ms avg latency, 635.0 ms max latency.
+      1927460 records sent, 385492.0 records/sec (94.11 MB/sec), 316.2 ms avg latency, 933.0 ms max latency.
+      2048518 records sent, 409703.6 records/sec (100.03 MB/sec), 303.8 ms avg latency, 829.0 ms max latency.
+      1701976 records sent, 340395.2 records/sec (83.10 MB/sec), 362.4 ms avg latency, 969.0 ms max latency.
+      1629588 records sent, 325917.6 records/sec (79.57 MB/sec), 384.0 ms avg latency, 994.0 ms max latency.
+      10000000 records sent, 359014.863215 records/sec (87.65 MB/sec), 335.89 ms avg latency, 994.00 ms max latency, 155 ms 50th, 908 ms 95th, 974 ms 99th, 989 ms 99.9th.
+
+    Test2: Producer test on topic producer-p3-rf2-mediummsgs-test with 3 partitions and 2 as replication factor and medium size message (1024 bytes or 1K)
+
+      380236 records sent, 76047.2 records/sec (74.26 MB/sec), 362.5 ms avg latency, 635.0 ms max latency.
+      560160 records sent, 112032.0 records/sec (109.41 MB/sec), 270.0 ms avg latency, 589.0 ms max latency.
+      565005 records sent, 113001.0 records/sec (110.35 MB/sec), 274.3 ms avg latency, 660.0 ms max latency.
+      528099 records sent, 105619.8 records/sec (103.14 MB/sec), 285.4 ms avg latency, 755.0 ms max latency.
+      530688 records sent, 106137.6 records/sec (103.65 MB/sec), 286.8 ms avg latency, 792.0 ms max latency.
+      564272 records sent, 112360.0 records/sec (109.73 MB/sec), 274.0 ms avg latency, 757.0 ms max latency.
+      409715 records sent, 81943.0 records/sec (80.02 MB/sec), 379.1 ms avg latency, 1549.0 ms max latency.
+      510029 records sent, 102005.8 records/sec (99.62 MB/sec), 305.9 ms avg latency, 642.0 ms max latency.
+      524865 records sent, 104973.0 records/sec (102.51 MB/sec), 292.8 ms avg latency, 582.0 ms max latency.
+      509987 records sent, 101997.4 records/sec (99.61 MB/sec), 297.0 ms avg latency, 813.0 ms max latency.
+      539689 records sent, 107937.8 records/sec (105.41 MB/sec), 289.5 ms avg latency, 568.0 ms max latency.
+      522855 records sent, 104571.0 records/sec (102.12 MB/sec), 293.8 ms avg latency, 470.0 ms max latency.
+      514035 records sent, 102807.0 records/sec (100.40 MB/sec), 295.8 ms avg latency, 581.0 ms max latency.
+      529614 records sent, 105922.8 records/sec (103.44 MB/sec), 281.1 ms avg latency, 956.0 ms max latency.
+      571865 records sent, 114373.0 records/sec (111.69 MB/sec), 275.1 ms avg latency, 780.0 ms max latency.
+      530212 records sent, 106042.4 records/sec (103.56 MB/sec), 292.0 ms avg latency, 602.0 ms max latency.
+      532534 records sent, 106506.8 records/sec (104.01 MB/sec), 284.4 ms avg latency, 649.0 ms max latency.
+      540102 records sent, 108020.4 records/sec (105.49 MB/sec), 288.0 ms avg latency, 641.0 ms max latency.
+      537948 records sent, 107589.6 records/sec (105.07 MB/sec), 278.9 ms avg latency, 751.0 ms max latency.
+      10000000 records sent, 103815.208928 records/sec (101.38 MB/sec), 293.53 ms avg latency, 1549.00 ms max latency, 263 ms 50th, 662 ms 95th, 830 ms 99th, 1368 ms 99.9th.
+
+
+    Test3: Producer test on topic producer-p3-rf2-bigmsgs-test with 3 partitions and 2 as replication factor and big size message (10240 bytes or 10K)
+
+        26620 records sent, 5324.0 records/sec (51.99 MB/sec), 348.4 ms avg latency, 626.0 ms max latency.
+        36557 records sent, 7311.4 records/sec (71.40 MB/sec), 275.7 ms avg latency, 561.0 ms max latency.
+        37655 records sent, 7531.0 records/sec (73.54 MB/sec), 272.0 ms avg latency, 611.0 ms max latency.
+        38231 records sent, 7646.2 records/sec (74.67 MB/sec), 266.7 ms avg latency, 652.0 ms max latency.
+        37994 records sent, 7598.8 records/sec (74.21 MB/sec), 264.3 ms avg latency, 771.0 ms max latency.
+        36784 records sent, 7356.8 records/sec (71.84 MB/sec), 274.8 ms avg latency, 874.0 ms max latency.
+        36477 records sent, 7295.4 records/sec (71.24 MB/sec), 281.9 ms avg latency, 897.0 ms max latency.
+        36558 records sent, 7311.6 records/sec (71.40 MB/sec), 280.9 ms avg latency, 885.0 ms max latency.
+        35125 records sent, 7025.0 records/sec (68.60 MB/sec), 290.2 ms avg latency, 917.0 ms max latency.
+        36699 records sent, 7339.8 records/sec (71.68 MB/sec), 279.0 ms avg latency, 889.0 ms max latency.
+        36221 records sent, 7244.2 records/sec (70.74 MB/sec), 283.9 ms avg latency, 878.0 ms max latency.
+        35366 records sent, 7073.2 records/sec (69.07 MB/sec), 283.9 ms avg latency, 981.0 ms max latency.
+        35741 records sent, 7148.2 records/sec (69.81 MB/sec), 289.8 ms avg latency, 1067.0 ms max latency.
+        35282 records sent, 7056.4 records/sec (68.91 MB/sec), 299.0 ms avg latency, 993.0 ms max latency.
+        36261 records sent, 7252.2 records/sec (70.82 MB/sec), 289.5 ms avg latency, 739.0 ms max latency.
+        36253 records sent, 7250.6 records/sec (70.81 MB/sec), 279.1 ms avg latency, 696.0 ms max latency.
+        35781 records sent, 7156.2 records/sec (69.88 MB/sec), 282.6 ms avg latency, 734.0 ms max latency.
+        36124 records sent, 7224.8 records/sec (70.55 MB/sec), 282.9 ms avg latency, 854.0 ms max latency.
+        37652 records sent, 7530.4 records/sec (73.54 MB/sec), 266.7 ms avg latency, 845.0 ms max latency.
+        36742 records sent, 7348.4 records/sec (71.76 MB/sec), 279.9 ms avg latency, 867.0 ms max latency.
+        35624 records sent, 7124.8 records/sec (69.58 MB/sec), 286.7 ms avg latency, 904.0 ms max latency.
+        36933 records sent, 7386.6 records/sec (72.13 MB/sec), 274.1 ms avg latency, 951.0 ms max latency.
+        38553 records sent, 7710.6 records/sec (75.30 MB/sec), 274.8 ms avg latency, 948.0 ms max latency.
+        37946 records sent, 7589.2 records/sec (74.11 MB/sec), 268.4 ms avg latency, 749.0 ms max latency.
+        35965 records sent, 7193.0 records/sec (70.24 MB/sec), 288.3 ms avg latency, 818.0 ms max latency.
+        35706 records sent, 7141.2 records/sec (69.74 MB/sec), 279.8 ms avg latency, 992.0 ms max latency.
+        35204 records sent, 7040.8 records/sec (68.76 MB/sec), 290.2 ms avg latency, 1010.0 ms max latency.
+        37073 records sent, 7414.6 records/sec (72.41 MB/sec), 276.9 ms avg latency, 856.0 ms max latency.
+        32521 records sent, 6504.2 records/sec (63.52 MB/sec), 320.4 ms avg latency, 1305.0 ms max latency.
+        35037 records sent, 7007.4 records/sec (68.43 MB/sec), 293.5 ms avg latency, 885.0 ms max latency.
+        37870 records sent, 7574.0 records/sec (73.96 MB/sec), 269.4 ms avg latency, 734.0 ms max latency.
+        36250 records sent, 7250.0 records/sec (70.80 MB/sec), 285.7 ms avg latency, 775.0 ms max latency.
+        34274 records sent, 6854.8 records/sec (66.94 MB/sec), 296.5 ms avg latency, 856.0 ms max latency.
+        37859 records sent, 7571.8 records/sec (73.94 MB/sec), 269.3 ms avg latency, 769.0 ms max latency.
+        32876 records sent, 6575.2 records/sec (64.21 MB/sec), 301.0 ms avg latency, 1168.0 ms max latency.
+        36943 records sent, 7388.6 records/sec (72.15 MB/sec), 283.7 ms avg latency, 1087.0 ms max latency.
+        37358 records sent, 7471.6 records/sec (72.96 MB/sec), 274.5 ms avg latency, 843.0 ms max latency.
+        35198 records sent, 7039.6 records/sec (68.75 MB/sec), 292.1 ms avg latency, 860.0 ms max latency.
+        36426 records sent, 7285.2 records/sec (71.14 MB/sec), 277.7 ms avg latency, 885.0 ms max latency.
+        35728 records sent, 7145.6 records/sec (69.78 MB/sec), 287.4 ms avg latency, 879.0 ms max latency.
+        36311 records sent, 7262.2 records/sec (70.92 MB/sec), 280.9 ms avg latency, 949.0 ms max latency.
+        35269 records sent, 7053.8 records/sec (68.88 MB/sec), 297.9 ms avg latency, 947.0 ms max latency.
+        37718 records sent, 7543.6 records/sec (73.67 MB/sec), 265.2 ms avg latency, 820.0 ms max latency.
+        33702 records sent, 6740.4 records/sec (65.82 MB/sec), 299.2 ms avg latency, 1056.0 ms max latency.
+        37340 records sent, 7468.0 records/sec (72.93 MB/sec), 281.5 ms avg latency, 1088.0 ms max latency.
+        37153 records sent, 7430.6 records/sec (72.56 MB/sec), 280.3 ms avg latency, 809.0 ms max latency.
+        36222 records sent, 7244.4 records/sec (70.75 MB/sec), 283.9 ms avg latency, 712.0 ms max latency.
+        35450 records sent, 7090.0 records/sec (69.24 MB/sec), 282.7 ms avg latency, 851.0 ms max latency.
+        36875 records sent, 7375.0 records/sec (72.02 MB/sec), 281.7 ms avg latency, 824.0 ms max latency.
+        36213 records sent, 7242.6 records/sec (70.73 MB/sec), 272.3 ms avg latency, 981.0 ms max latency.
+        35047 records sent, 7009.4 records/sec (68.45 MB/sec), 303.4 ms avg latency, 1083.0 ms max latency.
+        36390 records sent, 7278.0 records/sec (71.07 MB/sec), 276.4 ms avg latency, 790.0 ms max latency.
+        34755 records sent, 6951.0 records/sec (67.88 MB/sec), 305.0 ms avg latency, 927.0 ms max latency.
+        36986 records sent, 7397.2 records/sec (72.24 MB/sec), 272.5 ms avg latency, 683.0 ms max latency.
+        36966 records sent, 7393.2 records/sec (72.20 MB/sec), 271.6 ms avg latency, 874.0 ms max latency.
+        33856 records sent, 6771.2 records/sec (66.13 MB/sec), 310.3 ms avg latency, 991.0 ms max latency.
+        27288 records sent, 5457.6 records/sec (53.30 MB/sec), 377.4 ms avg latency, 1796.0 ms max latency.
+        34859 records sent, 6971.8 records/sec (68.08 MB/sec), 280.0 ms avg latency, 1271.0 ms max latency.
+        30086 records sent, 6017.2 records/sec (58.76 MB/sec), 345.2 ms avg latency, 1671.0 ms max latency.
+        38283 records sent, 7656.6 records/sec (74.77 MB/sec), 272.2 ms avg latency, 965.0 ms max latency.
+        37783 records sent, 7556.6 records/sec (73.79 MB/sec), 277.8 ms avg latency, 742.0 ms max latency.
+        32693 records sent, 6538.6 records/sec (63.85 MB/sec), 317.0 ms avg latency, 849.0 ms max latency.
+        35033 records sent, 7006.6 records/sec (68.42 MB/sec), 276.6 ms avg latency, 670.0 ms max latency.
+        38175 records sent, 7635.0 records/sec (74.56 MB/sec), 282.5 ms avg latency, 693.0 ms max latency.
+        38304 records sent, 7660.8 records/sec (74.81 MB/sec), 263.5 ms avg latency, 568.0 ms max latency.
+        37335 records sent, 7467.0 records/sec (72.92 MB/sec), 269.7 ms avg latency, 696.0 ms max latency.
+        32748 records sent, 6549.6 records/sec (63.96 MB/sec), 306.7 ms avg latency, 1457.0 ms max latency.
+        37258 records sent, 7451.6 records/sec (72.77 MB/sec), 274.1 ms avg latency, 838.0 ms max latency.
+        37250 records sent, 7450.0 records/sec (72.75 MB/sec), 276.2 ms avg latency, 852.0 ms max latency.
+        35848 records sent, 7169.6 records/sec (70.02 MB/sec), 287.5 ms avg latency, 990.0 ms max latency.
+        19302 records sent, 3860.4 records/sec (37.70 MB/sec), 529.1 ms avg latency, 3238.0 ms max latency.
+        37231 records sent, 7446.2 records/sec (72.72 MB/sec), 273.6 ms avg latency, 846.0 ms max latency.
+        30831 records sent, 6017.0 records/sec (58.76 MB/sec), 282.9 ms avg latency, 1688.0 ms max latency.
+        35208 records sent, 7041.6 records/sec (68.77 MB/sec), 344.2 ms avg latency, 1720.0 ms max latency.
+        37275 records sent, 7455.0 records/sec (72.80 MB/sec), 271.2 ms avg latency, 940.0 ms max latency.
+        35407 records sent, 7081.4 records/sec (69.15 MB/sec), 291.4 ms avg latency, 947.0 ms max latency.
+        37138 records sent, 7427.6 records/sec (72.54 MB/sec), 277.1 ms avg latency, 862.0 ms max latency.
+        36106 records sent, 7221.2 records/sec (70.52 MB/sec), 289.4 ms avg latency, 984.0 ms max latency.
+        29152 records sent, 5830.4 records/sec (56.94 MB/sec), 344.8 ms avg latency, 1807.0 ms max latency.
+        33571 records sent, 6714.2 records/sec (65.57 MB/sec), 301.6 ms avg latency, 1040.0 ms max latency.
+        36661 records sent, 7332.2 records/sec (71.60 MB/sec), 279.6 ms avg latency, 876.0 ms max latency.
+        35738 records sent, 7147.6 records/sec (69.80 MB/sec), 292.1 ms avg latency, 858.0 ms max latency.
+        35263 records sent, 7052.6 records/sec (68.87 MB/sec), 296.8 ms avg latency, 824.0 ms max latency.
+        34771 records sent, 6954.2 records/sec (67.91 MB/sec), 280.0 ms avg latency, 1010.0 ms max latency.
+        36917 records sent, 7383.4 records/sec (72.10 MB/sec), 294.9 ms avg latency, 1054.0 ms max latency.
+        37231 records sent, 7446.2 records/sec (72.72 MB/sec), 272.4 ms avg latency, 426.0 ms max latency.
+        38138 records sent, 7627.6 records/sec (74.49 MB/sec), 267.8 ms avg latency, 562.0 ms max latency.
+        31751 records sent, 6350.2 records/sec (62.01 MB/sec), 299.3 ms avg latency, 1114.0 ms max latency.
+        35943 records sent, 7188.6 records/sec (70.20 MB/sec), 306.3 ms avg latency, 1349.0 ms max latency.
+        37361 records sent, 6591.6 records/sec (64.37 MB/sec), 253.3 ms avg latency, 1657.0 ms max latency.
+        30861 records sent, 6172.2 records/sec (60.28 MB/sec), 388.1 ms avg latency, 1681.0 ms max latency.
+        34203 records sent, 6840.6 records/sec (66.80 MB/sec), 312.2 ms avg latency, 1018.0 ms max latency.
+        38215 records sent, 7643.0 records/sec (74.64 MB/sec), 268.7 ms avg latency, 465.0 ms max latency.
+        38099 records sent, 7619.8 records/sec (74.41 MB/sec), 268.5 ms avg latency, 521.0 ms max latency.
+        36506 records sent, 7301.2 records/sec (71.30 MB/sec), 272.5 ms avg latency, 778.0 ms max latency.
+        37745 records sent, 7535.4 records/sec (73.59 MB/sec), 266.4 ms avg latency, 848.0 ms max latency.
+        29920 records sent, 5984.0 records/sec (58.44 MB/sec), 347.1 ms avg latency, 1705.0 ms max latency.
+        36930 records sent, 7386.0 records/sec (72.13 MB/sec), 275.3 ms avg latency, 847.0 ms max latency.
+        36026 records sent, 7205.2 records/sec (70.36 MB/sec), 280.9 ms avg latency, 913.0 ms max latency.
+        35726 records sent, 7145.2 records/sec (69.78 MB/sec), 297.8 ms avg latency, 916.0 ms max latency.
+        38035 records sent, 7607.0 records/sec (74.29 MB/sec), 270.3 ms avg latency, 773.0 ms max latency.
+        28757 records sent, 5625.4 records/sec (54.94 MB/sec), 262.3 ms avg latency, 2080.0 ms max latency.
+        36919 records sent, 7383.8 records/sec (72.11 MB/sec), 348.1 ms avg latency, 2164.0 ms max latency.
+        37709 records sent, 7541.8 records/sec (73.65 MB/sec), 274.1 ms avg latency, 842.0 ms max latency.
+        37251 records sent, 7450.2 records/sec (72.76 MB/sec), 271.5 ms avg latency, 864.0 ms max latency.
+        31585 records sent, 6317.0 records/sec (61.69 MB/sec), 334.9 ms avg latency, 1309.0 ms max latency.
+        37832 records sent, 7566.4 records/sec (73.89 MB/sec), 266.2 ms avg latency, 776.0 ms max latency.
+        35623 records sent, 7124.6 records/sec (69.58 MB/sec), 283.9 ms avg latency, 908.0 ms max latency.
+        35150 records sent, 7030.0 records/sec (68.65 MB/sec), 294.1 ms avg latency, 872.0 ms max latency.
+        34788 records sent, 6957.6 records/sec (67.95 MB/sec), 292.6 ms avg latency, 988.0 ms max latency.
+        36129 records sent, 7225.8 records/sec (70.56 MB/sec), 284.5 ms avg latency, 871.0 ms max latency.
+        33536 records sent, 6707.2 records/sec (65.50 MB/sec), 306.0 ms avg latency, 944.0 ms max latency.
+        38273 records sent, 7654.6 records/sec (74.75 MB/sec), 272.4 ms avg latency, 901.0 ms max latency.
+        38131 records sent, 7626.2 records/sec (74.47 MB/sec), 269.3 ms avg latency, 741.0 ms max latency.
+        31682 records sent, 6336.4 records/sec (61.88 MB/sec), 315.7 ms avg latency, 1047.0 ms max latency.
+        34480 records sent, 6896.0 records/sec (67.34 MB/sec), 296.0 ms avg latency, 936.0 ms max latency.
+        37021 records sent, 7404.2 records/sec (72.31 MB/sec), 279.5 ms avg latency, 865.0 ms max latency.
+        34754 records sent, 6950.8 records/sec (67.88 MB/sec), 298.5 ms avg latency, 858.0 ms max latency.
+        36242 records sent, 7248.4 records/sec (70.79 MB/sec), 288.6 ms avg latency, 613.0 ms max latency.
+        35621 records sent, 7124.2 records/sec (69.57 MB/sec), 280.9 ms avg latency, 744.0 ms max latency.
+        34811 records sent, 6962.2 records/sec (67.99 MB/sec), 289.5 ms avg latency, 1034.0 ms max latency.
+        36969 records sent, 7393.8 records/sec (72.21 MB/sec), 278.4 ms avg latency, 848.0 ms max latency.
+        34942 records sent, 6988.4 records/sec (68.25 MB/sec), 292.1 ms avg latency, 964.0 ms max latency.
+        35645 records sent, 7127.6 records/sec (69.61 MB/sec), 291.2 ms avg latency, 822.0 ms max latency.
+        37258 records sent, 7451.6 records/sec (72.77 MB/sec), 271.0 ms avg latency, 802.0 ms max latency.
+        36374 records sent, 7274.8 records/sec (71.04 MB/sec), 280.7 ms avg latency, 877.0 ms max latency.
+        34706 records sent, 6941.2 records/sec (67.79 MB/sec), 302.3 ms avg latency, 919.0 ms max latency.
+        37385 records sent, 7477.0 records/sec (73.02 MB/sec), 273.4 ms avg latency, 855.0 ms max latency.
+        36194 records sent, 7238.8 records/sec (70.69 MB/sec), 287.4 ms avg latency, 785.0 ms max latency.
+        35440 records sent, 7088.0 records/sec (69.22 MB/sec), 289.1 ms avg latency, 760.0 ms max latency.
+        35171 records sent, 7034.2 records/sec (68.69 MB/sec), 279.5 ms avg latency, 1057.0 ms max latency.
+        32781 records sent, 6556.2 records/sec (64.03 MB/sec), 324.3 ms avg latency, 1107.0 ms max latency.
+        30592 records sent, 6118.4 records/sec (59.75 MB/sec), 331.1 ms avg latency, 1580.0 ms max latency.
+        37625 records sent, 7525.0 records/sec (73.49 MB/sec), 270.5 ms avg latency, 793.0 ms max latency.
+        35945 records sent, 7189.0 records/sec (70.21 MB/sec), 280.2 ms avg latency, 918.0 ms max latency.
+        35606 records sent, 7121.2 records/sec (69.54 MB/sec), 289.5 ms avg latency, 909.0 ms max latency.
+        34673 records sent, 6934.6 records/sec (67.72 MB/sec), 292.6 ms avg latency, 1020.0 ms max latency.
+        34805 records sent, 6961.0 records/sec (67.98 MB/sec), 300.4 ms avg latency, 884.0 ms max latency.
+        37543 records sent, 7508.6 records/sec (73.33 MB/sec), 272.3 ms avg latency, 798.0 ms max latency.
+        33094 records sent, 6618.8 records/sec (64.64 MB/sec), 305.9 ms avg latency, 1017.0 ms max latency.
+        35283 records sent, 7056.6 records/sec (68.91 MB/sec), 288.1 ms avg latency, 933.0 ms max latency.
+        32904 records sent, 6580.8 records/sec (64.27 MB/sec), 313.2 ms avg latency, 1201.0 ms max latency.
+        36156 records sent, 7231.2 records/sec (70.62 MB/sec), 285.2 ms avg latency, 865.0 ms max latency.
+        35052 records sent, 7010.4 records/sec (68.46 MB/sec), 289.6 ms avg latency, 961.0 ms max latency.
+        34144 records sent, 6828.8 records/sec (66.69 MB/sec), 307.1 ms avg latency, 892.0 ms max latency.
+        37385 records sent, 7477.0 records/sec (73.02 MB/sec), 270.1 ms avg latency, 784.0 ms max latency.
+        32983 records sent, 6596.6 records/sec (64.42 MB/sec), 311.4 ms avg latency, 990.0 ms max latency.
+        37144 records sent, 7428.8 records/sec (72.55 MB/sec), 273.2 ms avg latency, 870.0 ms max latency.
+        33371 records sent, 6674.2 records/sec (65.18 MB/sec), 308.8 ms avg latency, 901.0 ms max latency.
+        32696 records sent, 6539.2 records/sec (63.86 MB/sec), 321.5 ms avg latency, 1143.0 ms max latency.
+        38912 records sent, 7782.4 records/sec (76.00 MB/sec), 263.1 ms avg latency, 615.0 ms max latency.
+        37366 records sent, 7473.2 records/sec (72.98 MB/sec), 271.0 ms avg latency, 790.0 ms max latency.
+        36177 records sent, 7235.4 records/sec (70.66 MB/sec), 286.1 ms avg latency, 808.0 ms max latency.
+        37033 records sent, 7406.6 records/sec (72.33 MB/sec), 274.5 ms avg latency, 706.0 ms max latency.
+        34295 records sent, 6859.0 records/sec (66.98 MB/sec), 293.3 ms avg latency, 1282.0 ms max latency.
+        26069 records sent, 5213.8 records/sec (50.92 MB/sec), 406.0 ms avg latency, 2273.0 ms max latency.
+        36371 records sent, 7274.2 records/sec (71.04 MB/sec), 283.0 ms avg latency, 585.0 ms max latency.
+        36592 records sent, 7318.4 records/sec (71.47 MB/sec), 276.2 ms avg latency, 628.0 ms max latency.
+        34104 records sent, 6820.8 records/sec (66.61 MB/sec), 293.6 ms avg latency, 928.0 ms max latency.
+        32334 records sent, 6466.8 records/sec (63.15 MB/sec), 321.8 ms avg latency, 1442.0 ms max latency.
+        36492 records sent, 7298.4 records/sec (71.27 MB/sec), 283.6 ms avg latency, 775.0 ms max latency.
+        35267 records sent, 7053.4 records/sec (68.88 MB/sec), 285.1 ms avg latency, 814.0 ms max latency.
+        32991 records sent, 6598.2 records/sec (64.44 MB/sec), 308.0 ms avg latency, 974.0 ms max latency.
+        37429 records sent, 7485.8 records/sec (73.10 MB/sec), 271.9 ms avg latency, 864.0 ms max latency.
+        35665 records sent, 7133.0 records/sec (69.66 MB/sec), 292.8 ms avg latency, 847.0 ms max latency.
+        34313 records sent, 6862.6 records/sec (67.02 MB/sec), 296.9 ms avg latency, 873.0 ms max latency.
+        33756 records sent, 6751.2 records/sec (65.93 MB/sec), 298.9 ms avg latency, 1221.0 ms max latency.
+        32549 records sent, 6509.8 records/sec (63.57 MB/sec), 312.4 ms avg latency, 1318.0 ms max latency.
+        34662 records sent, 6932.4 records/sec (67.70 MB/sec), 301.8 ms avg latency, 980.0 ms max latency.
+        37330 records sent, 7466.0 records/sec (72.91 MB/sec), 270.6 ms avg latency, 837.0 ms max latency.
+        35444 records sent, 7088.8 records/sec (69.23 MB/sec), 290.6 ms avg latency, 883.0 ms max latency.
+        31388 records sent, 6277.6 records/sec (61.30 MB/sec), 337.0 ms avg latency, 1050.0 ms max latency.
+        36213 records sent, 7242.6 records/sec (70.73 MB/sec), 279.4 ms avg latency, 685.0 ms max latency.
+        33260 records sent, 6462.0 records/sec (63.11 MB/sec), 275.7 ms avg latency, 1351.0 ms max latency.
+        36060 records sent, 7212.0 records/sec (70.43 MB/sec), 318.6 ms avg latency, 1394.0 ms max latency.
+        37828 records sent, 7565.6 records/sec (73.88 MB/sec), 271.1 ms avg latency, 873.0 ms max latency.
+        34287 records sent, 6857.4 records/sec (66.97 MB/sec), 294.9 ms avg latency, 1105.0 ms max latency.
+        38376 records sent, 7675.2 records/sec (74.95 MB/sec), 267.2 ms avg latency, 920.0 ms max latency.
+        37091 records sent, 7418.2 records/sec (72.44 MB/sec), 279.5 ms avg latency, 850.0 ms max latency.
+        33350 records sent, 6670.0 records/sec (65.14 MB/sec), 307.1 ms avg latency, 1018.0 ms max latency.
+        29965 records sent, 5993.0 records/sec (58.53 MB/sec), 342.0 ms avg latency, 1483.0 ms max latency.
+        35256 records sent, 7051.2 records/sec (68.86 MB/sec), 297.2 ms avg latency, 783.0 ms max latency.
+        32844 records sent, 6568.8 records/sec (64.15 MB/sec), 306.3 ms avg latency, 1099.0 ms max latency.
+        36855 records sent, 7371.0 records/sec (71.98 MB/sec), 281.5 ms avg latency, 735.0 ms max latency.
+        37954 records sent, 7590.8 records/sec (74.13 MB/sec), 275.6 ms avg latency, 668.0 ms max latency.
+        34073 records sent, 6724.5 records/sec (65.67 MB/sec), 292.5 ms avg latency, 819.0 ms max latency.
+        33981 records sent, 6796.2 records/sec (66.37 MB/sec), 311.7 ms avg latency, 686.0 ms max latency.
+        [2022-01-14 11:34:08,201] WARN [Producer clientId=producer-1] Got error produce response with correlation id 6624335 on topic-partition producer-p3-rf2-bigmsgs-test-0, retrying (2147483646 attempts left). Error: KAFKA_STORAGE_ERROR (org.apache.kafka.clients.producer.internals.Sender)
+        [2022-01-14 11:34:08,202] WARN [Producer clientId=producer-1] Received invalid metadata error in produce request on partition producer-p3-rf2-bigmsgs-test-0 due to org.apache.kafka.common.errors.KafkaStorageException: Disk error when trying to access log file on the disk.. Going to request metadata update now (org.apache.kafka.clients.producer.internals.Sender)
+        [2022-01-14 11:34:08,203] WARN [Producer clientId=producer-1] Got error produce response with correlation id 6624338 on topic-partition producer-p3-rf2-bigmsgs-test-0, retrying (2147483646 attempts left). Error: KAFKA_STORAGE_ERROR (org.apache.kafka.clients.producer.internals.Sender)
+        [2022-01-14 11:34:08,203] WARN [Producer clientId=producer-1] Received invalid metadata error in produce request on partition producer-p3-rf2-bigmsgs-test-0 due to org.apache.kafka.common.errors.KafkaStorageException: Disk error when trying to access log file on the disk.. Going to request metadata update now (org.apache.kafka.clients.producer.internals.Sender)
+        [2022-01-14 11:34:08,206] WARN [Producer clientId=producer-1] Got error produce response with correlation id 6624341 on topic-partition producer-p3-rf2-bigmsgs-test-0, retrying (2147483646 attempts left). Error: KAFKA_STORAGE_ERROR (org.apache.kafka.clients.producer.internals.Sender)
+        [2022-01-14 11:34:08,206] WARN [Producer clientId=producer-1] Received invalid metadata error in produce request on partition producer-p3-rf2-bigmsgs-test-0 due to org.apache.kafka.common.errors.KafkaStorageException: Disk error when trying to access log file on the disk.. Going to request metadata update now (org.apache.kafka.clients.producer.internals.Sender)
+        [2022-01-14 11:34:08,209] WARN [Producer clientId=producer-1] Got error produce response with correlation id 6624344 on topic-partition producer-p3-rf2-bigmsgs-test-0, retrying (2147483646 attempts left). Error: KAFKA_STORAGE_ERROR (org.apache.kafka.clients.producer.internals.Sender)
+        [2022-01-14 11:34:08,209] WARN [Producer clientId=producer-1] Received invalid metadata error in produce request on partition producer-p3-rf2-bigmsgs-test-0 due to org.apache.kafka.common.errors.KafkaStorageException: Disk error when trying to access log file on the disk.. Going to request metadata update now (org.apache.kafka.clients.producer.internals.Sender)
+        [2022-01-14 11:34:08,211] WARN [Producer clientId=producer-1] Got error produce response with correlation id 6624347 on topic-partition producer-p3-rf2-bigmsgs-test-0, retrying (2147483646 attempts left). Error: KAFKA_STORAGE_ERROR (org.apache.kafka.clients.producer.internals.Sender)
+        [2022-01-14 11:34:08,211] WARN [Producer clientId=producer-1] Received invalid metadata error in produce request on partition producer-p3-rf2-bigmsgs-test-0 due to org.apache.kafka.common.errors.KafkaStorageException: Disk error when trying to access log file on the disk.. Going to request metadata update now (org.apache.kafka.clients.producer.internals.Sender)
+
+}
+
+Testing Producer: How replication factor and min insync replicas affect performance {
+
+    Example1:
+        I have no name!@400e42f07586:/opt/bitnami/kafka/bin$ kafka-topics.sh \
+        >     --create \
+        >     --topic small-topic-test \
+        >     --partitions 3 \
+        >     --replication-factor 1 \
+        >     --config retention.ms=3600000 \
+        >     --config min.insync.replicas=1 \
+        >     --bootstrap-server kafka-server1:9092,kafka-server2:9092,kafka-server3:9092
+        Created topic small-topic-test.
+        I have no name!@400e42f07586:/opt/bitnami/kafka/bin$ kafka-producer-perf-test.sh \
+        >      --topic small-topic-test \
+        >      --throughput -1 \
+        >      --num-records 10000000 \
+        >      --record-size 256 \
+        >      --producer-props acks=all bootstrap.servers=kafka-server1:9092,kafka-server2:9092,kafka-server3:9092 \
+        >      --print-metrics
+        1803579 records sent, 360715.8 records/sec (88.07 MB/sec), 287.3 ms avg latency, 510.0 ms max latency.
+        5276552 records sent, 1055310.4 records/sec (257.64 MB/sec), 120.4 ms avg latency, 524.0 ms max latency.
+        10000000 records sent, 801667.468334 records/sec (195.72 MB/sec), 145.56 ms avg latency, 524.00 ms max latency, 129 ms 50th, 383 ms 95th, 458 ms 99th, 505 ms 99.9th.
+
+    Example2:
+        I have no name!@400e42f07586:/opt/bitnami/kafka/bin$ kafka-topics.sh     --delete     --topic small-topic-test  --bootstrap-server kafka-server1:9092,kafka-server2:9092,kafka-server3:9092
+        I have no name!@400e42f07586:/opt/bitnami/kafka/bin$ kafka-topics.sh     --create     --topic small-topic-test     --partitions 3     --replication-factor 2     --config retention.ms=3600000     --config min.insync.replicas=2     --bootstrap-server kafka-server1:9092,kafka-server2:9092,kafka-server3:9092
+        Created topic small-topic-test.
+        I have no name!@400e42f07586:/opt/bitnami/kafka/bin$ kafka-producer-perf-test.sh      --topic small-topic-test      --throughput -1      --num-records 10000000      --record-size 256      --producer-props acks=all bootstrap.servers=kafka-server1:9092,kafka-server2:9092,kafka-server3:9092
+        1541670 records sent, 308334.0 records/sec (75.28 MB/sec), 337.6 ms avg latency, 775.0 ms max latency.
+        2234945 records sent, 446453.3 records/sec (109.00 MB/sec), 279.0 ms avg latency, 635.0 ms max latency.
+        2097568 records sent, 419513.6 records/sec (102.42 MB/sec), 297.8 ms avg latency, 920.0 ms max latency.
+        2286659 records sent, 457331.8 records/sec (111.65 MB/sec), 273.4 ms avg latency, 838.0 ms max latency.
+        10000000 records sent, 414061.529543 records/sec (101.09 MB/sec), 290.23 ms avg latency, 920.00 ms max latency, 168 ms 50th, 673 ms 95th, 836 ms 99th, 910 ms 99.9th.
+
+    Example3:
+        I have no name!@400e42f07586:/opt/bitnami/kafka/bin$ kafka-topics.sh     --delete     --topic small-topic-test  --bootstrap-server kafka-server1:9092,kafka-server2:9092,kafka-server3:9092
+        I have no name!@400e42f07586:/opt/bitnami/kafka/bin$ kafka-topics.sh     --create     --topic small-topic-test     --partitions 3     --replication-factor 3     --config retention.ms=3600000     --config min.insync.replicas=3     --bootstrap-server kafka-server1:9092,kafka-server2:9092,kafka-server3:9092
+        Created topic small-topic-test.
+        I have no name!@400e42f07586:/opt/bitnami/kafka/bin$ kafka-producer-perf-test.sh      --topic small-topic-test      --throughput -1      --num-records 10000000      --record-size 256      --producer-props acks=all bootstrap.servers=kafka-server1:9092,kafka-server2:9092,kafka-server3:9092
+        658419 records sent, 131683.8 records/sec (32.15 MB/sec), 741.1 ms avg latency, 1302.0 ms max latency.
+        1750883 records sent, 350176.6 records/sec (85.49 MB/sec), 362.5 ms avg latency, 1092.0 ms max latency.
+        1670000 records sent, 334000.0 records/sec (81.54 MB/sec), 359.3 ms avg latency, 1060.0 ms max latency.
+        1346114 records sent, 269222.8 records/sec (65.73 MB/sec), 463.5 ms avg latency, 1055.0 ms max latency.
+        1458439 records sent, 291687.8 records/sec (71.21 MB/sec), 429.6 ms avg latency, 1008.0 ms max latency.
+        1437561 records sent, 287512.2 records/sec (70.19 MB/sec), 432.5 ms avg latency, 1057.0 ms max latency.
+        1427002 records sent, 285400.4 records/sec (69.68 MB/sec), 435.9 ms avg latency, 1043.0 ms max latency.
+        10000000 records sent, 274476.436198 records/sec (67.01 MB/sec), 438.40 ms avg latency, 1302.00 ms max latency, 238 ms 50th, 1024 ms 95th, 1058 ms 99th, 1276 ms 99.9th.
+
+}
